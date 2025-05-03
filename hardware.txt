@@ -1,7 +1,7 @@
 Hardware key can provide you better protection and shorter password
 Using this instruction, you can easily create it:
 1. Launch "hardware.py"
-2. Select drive for key creation. Warning: all data will be lost. It may take a while.
+2. Select drive for key creation. Warning: all data will be lost. It may take a while. If you need, select reserve drive.
 3. When your key will be created and encrypted, read your password
 4. When you will need to use that key, input "HARDWARE <drive letter> <password>". For example, if after insertion drive received the letter "D" and password is AbCdEf, input HARDWARE D AbCdEf.
 
