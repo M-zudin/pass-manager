@@ -18,7 +18,7 @@ def add_passwd(site,passwd,key,forced=False):
             o.write(fCiph.getvalue())
         return 1
     else:
-        print(f"Уже есть пароль для этого сайта! Введите 3, а затем '{site}' чтобы посмотреть его.")
+        print(f"You already have password for this site! Input 3, then '{site}' to see it.")
         return None
 
 def remove_passwd(site,key):
@@ -30,7 +30,7 @@ def remove_passwd(site,key):
         os.remove(file)
         return 1
     except FileNotFoundError:
-        print("Нет пароля для этого сайта")
+        print("No password for this site")
         return None
 
 def read_passwd(site,key):
@@ -47,11 +47,11 @@ def read_passwd(site,key):
         try:
             pyAesCrypt.decryptStream(fIn,fDec,key,buf)
         except ValueError:
-            print("Неверный мастер-пароль")
+            print("Incorrect master-password")
             return None
         return str(fDec.getvalue())
     else:
-        print("Нет пароля для этого сайта")
+        print("No password for this site")
         return None
 
 def create_key(master_passwd):
@@ -59,7 +59,7 @@ def create_key(master_passwd):
     return str(key)
 
 def hardware_passwd_to_key(passwd):
-    print("Подождите...")
+    print("Wait a bit...")
     symbols="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ+-"
     key=0
     for x in passwd:
@@ -67,7 +67,7 @@ def hardware_passwd_to_key(passwd):
             key+=symbols.find(x)
             key<<=6
         else:
-            print("Некорректный пароль")
+            print("Invalid password")
             return 0
     return key
     
@@ -84,12 +84,12 @@ def read_hardware_key(disk,pos):
     try:
         pyAesCrypt.decryptFile(f"{disk}:\\key.key","key.key",key,buf)
     except ValueError:
-        print("Не та флешка или не тот компьютер")
+        print("Wrong hardware key or wrong computer")
         return 0
     except FileNotFoundError:
-        print("Файл ключа не найден")
+        print("Key not found")
     with open('key.key','rb') as o:
-        o.seek(pos) #чтобы не читать весь файл
+        o.seek(pos) #you don't want to read all file
         data=o.read(32)
     os.remove("key.key")
     key=0
@@ -100,15 +100,15 @@ def read_hardware_key(disk,pos):
     return key
 
 def main():
-    print("Инструкция по использованию физического ключа - hardware.txt")
-    printable='''0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~''' #string.printable, но без ' \t\n\r\x0b\x0c' 
-    master_passwd=input("Введите мастер-пароль: ")
+    print("Instruction for using hardware key - hardware.txt")
+    printable='''0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~''' #string.printable without ' \t\n\r\x0b\x0c' 
+    master_passwd=input("Input master-password: ")
     lst=master_passwd.split()
     if lst[0]=="HARDWARE" and len(lst)==3:
         if os.path.exists(lst[1]+':'):
             pos=hardware_passwd_to_key(lst[2])
             if pos:
-                pre_key=read_hardware_key(disk+':',pos)
+                pre_key=read_hardware_key(lst[1]+':',pos)
                 if pre_key:
                     key=create_key(pre_key)
                 else:
@@ -116,7 +116,7 @@ def main():
             else:
                 return 0
         else:
-            print("Диск не подключен")
+            print("Disk is not connected")
     else:
         key=create_key(master_passwd)
     master_passwd=os.urandom(16)
@@ -124,40 +124,40 @@ def main():
     while True:
         site=os.urandom(16)
         passwd=os.urandom(16)
-        action=input('''Выберите действие:
-1. Добавить пароль
-2. Удалить пароль
-3. Прочитать пароль
-4. Выход
-Ваш выбор: ''')
+        action=input('''Select an action:
+1. Add password
+2. Remove password
+3. Read password
+4. Exit
+Your choice: ''')
         if action=='1':
-            site=input("Сайт: ")
-            passwd=input("Пароль (оставьте пустым для авто-генерации): ")
+            site=input("Site: ")
+            passwd=input("Password (leave empty for auto-generation): ")
             if not passwd:
                 for x in range(32):
                     passwd+=secrets.choice(printable)
-                print(f"Сгенерированный пароль: {passwd}")
+                print(f"Generated password: {passwd}")
             if add_passwd(site,passwd,key):
-                print("Пароль добавлен!")
+                print("Password added successfully!")
             else:
-                if input("Введите 'ok' чтобы перезаписать: "):
+                if input("Input 'ok' to overwrite: "):
                     add_passwd(site,passwd,key,forced=True)
-                    print("Пароль перезаписан!")
+                    print("Password overwritten successfully!")
         elif action=='2':
-            site=input("Сайт: ")
+            site=input("Site: ")
             if remove_passwd(site,key):
-                print("Пароль удалён!")
+                print("Password removed successfully!")
         elif action=='3':
-            site=input("Сайт: ")
-            passwd=read_passwd(site,key)[2:-1] #Возврашает строку вида "b'password'", без [2:-1] выводилось бы b'password'
+            site=input("Site: ")
+            passwd=read_passwd(site,key)[2:-1] #Returns string like "b'password'", so without [2:-1] will print b'password'
             if passwd:  
-                print(f"Пароль: {passwd}")
+                print(f"Password for {site}: {passwd}")
         elif action=='4':
             exit()
         else:
-            print("Неверное действие")
-        input("Нажмите enter для следующего действия...")
+            print("Invalid action")
+        input("Press enter for next action...")
         os.system('cls')
 if __name__=='__main__':
     main()
-    input("Нажмите enter для выхода...")
+    input("Press enter to exit...")
