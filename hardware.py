@@ -62,10 +62,10 @@ if os.path.exists(disk) and os.path.exists(reserve_disk) and disk!=reserve_disk:
         print("Creating reserve key...")
         for x in os.listdir(reserve_disk):
             path=os.path.join(reserve_disk,x)
-        if os.path.isdir(path):
-            shutil.rmtree(path)
-        else:
-            os.remove(path)
+            if os.path.isdir(path):
+                shutil.rmtree(path)
+            else:
+                os.remove(path)
         pyAesCrypt.encryptFile("temp_key.key",f"{reserve_disk}\\key.key",key,buf)
         os.remove("temp_key.key")
         print("Done!")
