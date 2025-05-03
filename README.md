@@ -9,7 +9,7 @@ wmi
 
 <h2>Features:</h2>
 
-In-memoryAES-256 encryption/decryption (plaintext never will be on disk, only in RAM) for your passwords
+In-memory AES-256 encryption/decryption (plaintext never will be on disk, only in RAM) for your passwords
 
 File names are generated using SHA-256, so they don't tell anything about sites, but the same site+password will always give the same file name, that's why it works
 
