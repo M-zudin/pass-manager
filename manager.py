@@ -55,7 +55,7 @@ def read_passwd(site,key):
         return None
 
 def create_key(master_passwd):
-    key=hashlib.pbkdf2_hmac('sha256',master_passwd.encode(),b'''{Ano<x#{#OBy1X8izQbwP"7}?])kr2(8Q3r~r&('rA1zz#8r<g]BDXyxZXfgdmbQ''',10**5,32)
+    key=hashlib.pbkdf2_hmac('sha256',master_passwd.encode(),b'''{Ano<x#{#OBy1X8izQbwP"7}?])kr2(8Q3r~r&('rA1zz#8r<g]BDXyxZXfgdmbQ''',10**6,32)
     return str(key)
 
 def hardware_passwd_to_key(passwd):
