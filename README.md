@@ -1,5 +1,5 @@
 # pass-manager
-Python password manager, it looks like secure for some tasks
+Python windows-only password manager, it looks like secure for some tasks
 
 <h2>You will need to install these libraries:</h2>
 
