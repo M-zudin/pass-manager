@@ -20,10 +20,12 @@ For this program, any internal disk may be a hardware key
 That's how it works:
 
 <ul>
-  <li>A big random file created on disk, taking almost all space</li>
-  <li>This file encrypted, using serial number of your disk C and serial number of hardware key</li>
-  <li>Random byte chosen as "start byte"</li>
-  <li>Its position encoded, making short and easy-to-remember password</li>
+  <li>A big random file is created on disk, taking almost all space</li>
+  <li>This file is encrypted, using serial number of your disk C and serial number of hardware key</li>
+  <li>Random byte is chosen as "start byte"</li>
+  <li>Its position encoded, creating short and easy-to-remember password</li>
 </ul>
 
 After that, your 3FA is ready, and factors are serial number of hardware key, serial number of your disk C and password
+
+<h3>Currently working on gui</h3>
